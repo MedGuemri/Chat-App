@@ -3,20 +3,20 @@ import MessageModel from "../models/messageModel.js"
 
 
 
-export const sendMessage=async (req,res)=>{
+export const sendMessage = async (req, res) => {
     try {
 
-        const {message}=req.body
-        const {id: reciverId}=req.params
-        const senderId=req.user._id
+        const { message } = req.body
+        const { id: reciverId } = req.params
+        const senderId = req.user._id
 
         let conversation = await ConverstaionModel.findOne({
-            participents:{$all:[senderId,reciverId]}
+            participents: { $all: [senderId, reciverId] }
         })
 
-        if(!conversation){
-            conversation= await ConverstaionModel.create({
-                participents:[senderId,reciverId]
+        if (!conversation) {
+            conversation = await ConverstaionModel.create({
+                participents: [senderId, reciverId]
             })
         }
 
@@ -26,12 +26,12 @@ export const sendMessage=async (req,res)=>{
             message
         })
 
-        if(newMessage){
+        if (newMessage) {
             conversation.messages.push(newMessage._id)
         }
-       
 
-        await Promise.all([conversation.save(),newMessage.save()])
+
+        await Promise.all([conversation.save(), newMessage.save()])
 
         res.status(201).json(newMessage)
 
@@ -39,32 +39,32 @@ export const sendMessage=async (req,res)=>{
 
 
 
-        
+
     } catch (error) {
         console.log("error in send message contoller ", error.message)
-        return res.status(500).json({error:"internal server error"})
+        return res.status(500).json({ error: "internal server error" })
     }
 }
 
-export const getMessage=async(req,res)=>{
+export const getMessage = async (req, res) => {
     try {
-        const {id:userToChtId}=req.params
-        const senderId=req.user._id
+        const { id: userToChtId } = req.params
+        const senderId = req.user._id
 
         const conversation = await ConverstaionModel.findOne({
-            participents:{$all:[senderId,userToChtId]}
+            participents: { $all: [senderId, userToChtId] }
         }).populate("messages")
 
         if (!conversation) return res.status(200).json([])
 
         const messages = conversation.messages
 
-		res.status(200).json(messages)
+        res.status(200).json(messages)
 
 
-        
+
     } catch (error) {
         console.log("error in get message contoller ", error.message)
-        return res.status(500).json({error:"internal server error"})
+        return res.status(500).json({ error: "internal server error" })
     }
 }

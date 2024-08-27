@@ -1,14 +1,46 @@
+import { useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
+import useConversation from "../../store/useConverstaion";
+import useGetConversations from "../../hooks/useGetConversations";
+import toast from "react-hot-toast";
 
 const SearhInput = () => {
+	const [search,setSearch]=useState("")
+	const {setSelectedConversation}=useConversation()
+	const{conversations}=useGetConversations()
+
+	const handelSubmit=(e)=>{
+		e.preventDefault()
+		if(!search)return;
+		if(search.length<3){
+			return toast.error("search term must be at least 3 characters")
+		}
+		const conversation = conversations.find((c)=>c.fullName.toLowerCase().includes(search.toLowerCase()))
+
+		if(conversation){
+			setSelectedConversation(conversation)
+			setSearch("")
+		}else{
+			toast.error("no such useer found ")
+		}
+	}
   return (
-    <form className='flex items-center gap-2'>
-			<input type='text' placeholder='Search…' className='input input-bordered rounded-full' />
-			<button type='submit' className='btn btn-circle bg-emerald-800  hover:bg-emerald-600 text-white'>
-				<IoSearchSharp className='w-6 h-6 outline-none' />
-			</button>
-		</form>
-  )
+    <form onSubmit={handelSubmit} className="flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Search…"
+        className="input input-bordered rounded-full"
+		value={search}
+		onChange={(e)=>setSearch(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="btn btn-circle hover:bg-emerald-800  bg-emerald-600 text-white"
+      >
+        <IoSearchSharp className="w-6 h-6 outline-none" />
+      </button>
+    </form>
+  );
 }
 
 export default SearhInput
