@@ -14,8 +14,12 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
+<<<<<<< HEAD
     "react-router-dom": "^6.26.1",
     "zustand": "^4.5.5"
+=======
+    "react-router-dom": "^6.26.1"
+>>>>>>> accb234e042febf56f76af8ff43f458e9287f58f
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
