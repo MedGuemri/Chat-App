@@ -1,15 +1,19 @@
+import { useSocketContext } from "../../context/socketContext";
 import useConversation from "../../store/useConverstaion";
 
 const Conversation = ({converstaion,emoji,lastIndex}) => {
   const {selectedConversation,setSelectedConversation}=useConversation()
 
   const isSelected= selectedConversation?._id === converstaion._id
+  const {onlineUsers}=useSocketContext()
+  const isOnline = onlineUsers.includes(converstaion._id)
+  
   return (
     <>
       <div className={`flex gap-2 items-center hover:bg-emerald-600 rounded p-2 py-1 cursor-pointer ${isSelected? "bg-emerald-600":""}`}
         onClick={()=>setSelectedConversation(converstaion)}
       >
-        <div className="avatar online">
+        <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="w-12 rounded-full">
             <img
               src={converstaion.profilePic}

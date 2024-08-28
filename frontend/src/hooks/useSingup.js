@@ -1,6 +1,6 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
-import { useAuthContext } from "../context/athContext"
+import { useAuthContext } from "../context/authContext"
 
 
 const useSingup = () => {
